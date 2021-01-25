@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SpringDocsLearning-Annotated" />
+        <module name="springdocslearning_annoted" />
       </profile>
     </annotationProcessing>
   </component>

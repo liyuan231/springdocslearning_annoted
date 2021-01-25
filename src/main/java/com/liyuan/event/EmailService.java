@@ -3,7 +3,6 @@ package com.liyuan.event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +12,14 @@ public class EmailService {
     ApplicationEventPublisher applicationEventPublisher;
     private List<String> blockedList;
 
+    public ApplicationEventPublisher getApplicationEventPublisher() {
+        return applicationEventPublisher;
+    }
+
+    public List<String> getBlockedList() {
+        return blockedList;
+    }
+
     @Autowired
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
@@ -20,6 +27,7 @@ public class EmailService {
 
     @Autowired
     public void setBlockedList(@Value("#{{'123@qq.com','234@qq.com'}}") List<String> blockedList) {
+        System.out.println("set blocked list success!");
         this.blockedList = blockedList;
     }
 

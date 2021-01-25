@@ -8,7 +8,6 @@ import com.liyuan.beans.PrimaryAnnotationTest;
 import com.liyuan.beans.SelfInjectionBean;
 import com.liyuan.config.AppConfig;
 import com.liyuan.config.MyConfiguration;
-import com.liyuan.convert.AEnum;
 import com.liyuan.convert.ConversionServiceTest;
 import com.liyuan.convert.MyConverter;
 import com.liyuan.dao.CustomerPreferenceDao;
@@ -20,6 +19,7 @@ import com.liyuan.lookupmthodinjection.ClientService;
 import com.liyuan.messageSource.Example;
 import com.liyuan.model.MovieFinder;
 import com.liyuan.model.MovieRecommender;
+import com.liyuan.model.Person;
 import com.liyuan.model.SimpleMovieLister;
 import com.liyuan.property.PropertyTest;
 import com.liyuan.resource.ResourceBean;
@@ -33,7 +33,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -402,39 +401,55 @@ public class test {
         System.out.println(validator);
     }
 
-    @Test public void test35(){
+    @Test
+    public void test35() {
         Converter<String, Integer> converter = new MyConverter();
         Integer convert = converter.convert("123");
         System.out.println(convert);
     }
-    @Test public void test36(){
+
+    @Test
+    public void test36() {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
         PropertyTest propertyTest = (PropertyTest) applicationContext.getBean("propertyTest");
         System.out.println(propertyTest);
-        ConversionServiceTest<Map,Set> conversionServiceTest = (ConversionServiceTest) applicationContext.getBean("conversionServiceTest");
-        Map<String,String> map = new HashMap<>();
-        map.put("1","one");
-        map.put("2","two");
+        ConversionServiceTest<Map, Set> conversionServiceTest = (ConversionServiceTest) applicationContext.getBean("conversionServiceTest");
+        Map<String, String> map = new HashMap<>();
+        map.put("1", "one");
+        map.put("2", "two");
         Set test = conversionServiceTest.test(map, Set.class);
         System.out.println(Arrays.toString(test.toArray()));
     }
-    @Test public void test37(){
+
+    @Test
+    public void test37() {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
         ConversionService conversionService = (ConversionService) applicationContext.getBean("conversionService");
 //        Map convert = conversionService.convert(AEnum.E, Map.class);
 //        System.out.println(convert);
     }
-    @Test public void test38(){
+
+    @Test
+    public void test38() {
         DefaultConversionService defaultConversionService = new DefaultConversionService();
 //        defaultConversionService.
         List<Integer> list = new ArrayList<>();
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             list.add(i);
         }
         List<String> convert = (List<String>) defaultConversionService.convert(list, TypeDescriptor.forObject(list), TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(String.class)));
         System.out.println(convert.get(1));
 //        Enhancer
+    }
 
+    @Test
+    public void test39() {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
+        Person person = (Person) applicationContext.getBean("person");
+//        System.out.println(person.getName());/**/
+        EmailService proxy = (EmailService) applicationContext.getBean("proxy");
+        List<String> blockedList = proxy.getBlockedList();
+        System.out.println(Arrays.toString(blockedList.toArray()));
     }
 
 }
